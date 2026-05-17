@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jurie Engelbrecht — Dynamic Ground Solutions Australia</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:      #0a0a0a;
+    --surface:  #1a1a1a;
+    --panel:    #242424;
+    --border:   #2e2e2e;
+    --charcoal: #3d3d3d;
+    --orange:   #f15a22;
+    --orange-dim: rgba(241,90,34,0.18);
+    --muted:    #7a7a7a;
+    --light:    #e8e8e8;
+    --white:    #ffffff;
+  }
+
+  body {
+    background: var(--ink);
+    color: var(--light);
+    font-family: 'Barlow', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grid texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(241,90,34,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(241,90,34,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .card {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    width: 100%;
+    background: var(--surface);
+    color: var(--light);
+    padding: 0;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+    box-shadow:
+      0 0 0 1px rgba(241,90,34,0.08),
+      4px 4px 0 var(--orange),
+      20px 20px 60px rgba(0,0,0,0.6);
+    animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+    overflow: hidden;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(30px) rotate(-0.5deg); }
+    to   { opacity: 1; transform: translateY(0) rotate(0deg); }
+  }
+
+  /* Orange top accent bar */
+  .card-accent {
+    height: 3px;
+    background: linear-gradient(90deg, var(--orange) 0%, rgba(241,90,34,0.3) 100%);
+  }
+
+  .card-inner {
+    padding: 2.5rem 2.5rem 2rem;
+  }
+
+  /* Logo strip */
+  .logo-strip {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    animation: fadein 0.4s 0.1s ease both;
+  }
+
+  .logo-img {
+    height: 38px;
+    width: auto;
+    filter: brightness(0) invert(1);
+    opacity: 0.9;
+  }
+
+  .logo-divider {
+    width: 1px;
+    height: 28px;
+    background: var(--charcoal);
+  }
+
+  .logo-tagline {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+
+  .avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 2px;
+    border: 1px solid var(--charcoal);
+    background: var(--panel);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--orange);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .avatar::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: -1px;
+    width: 8px;
+    height: 8px;
+    background: var(--orange);
+    border-radius: 50%;
+    transform: translate(-3px, 3px);
+  }
+
+  .name-block { flex: 1; padding-top: 0.2rem; }
+
+  .name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+
+  .title {
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--orange);
+    font-weight: 500;
+    margin-bottom: 0.15rem;
+  }
+
+  .company {
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-bottom: 1.8rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 1rem 1.1rem;
+  }
+
+  .detail-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    animation: fadein 0.5s ease both;
+  }
+
+  .detail-row:nth-child(1) { animation-delay: 0.15s; }
+  .detail-row:nth-child(2) { animation-delay: 0.25s; }
+  .detail-row:nth-child(3) { animation-delay: 0.35s; }
+  .detail-row:nth-child(4) { animation-delay: 0.45s; }
+
+  @keyframes fadein {
+    from { opacity: 0; transform: translateX(-8px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  .detail-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--orange);
+    flex-shrink: 0;
+    background: var(--orange-dim);
+    border-radius: 2px;
+  }
+
+  .detail-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+
+  .detail-value {
+    font-size: 0.82rem;
+    color: var(--light);
+    font-weight: 400;
+  }
+
+  .detail-value a {
+    color: var(--light);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(232,232,232,0.15);
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .detail-value a:hover {
+    color: var(--orange);
+    border-color: var(--orange);
+  }
+
+  /* QR section */
+  .qr-section {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1rem 1.1rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    margin-bottom: 1.2rem;
+    animation: fadein 0.5s 0.55s ease both;
+  }
+
+  #qrcode {
+    flex-shrink: 0;
+    background: white;
+    padding: 8px;
+    border-radius: 2px;
+    display: flex;
+  }
+
+  #qrcode canvas, #qrcode img { display: block; }
+
+  .qr-info { flex: 1; }
+
+  .qr-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 0.35rem;
+  }
+
+  .qr-desc {
+    font-size: 0.72rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* Save button */
+  .save-btn {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    background: var(--orange);
+    color: var(--white);
+    border: none;
+    border-radius: 2px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
+    animation: fadein 0.5s 0.65s ease both;
+  }
+
+  .save-btn:hover {
+    background: #ff6b32;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 18px rgba(241,90,34,0.35);
+  }
+
+  .save-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 0.6rem;
+    color: var(--charcoal);
+    letter-spacing: 0.1em;
+    margin-top: 1rem;
+    animation: fadein 0.5s 0.75s ease both;
+    font-family: 'Barlow Condensed', sans-serif;
+    text-transform: uppercase;
+  }
+
+  .corner-mark {
+    position: absolute;
+    top: 1rem;
+    right: 1.2rem;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    color: var(--charcoal);
+    text-transform: uppercase;
+    font-family: 'Barlow Condensed', sans-serif;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="card-accent"></div>
+  <div class="card-inner">
+    <div class="corner-mark">v-card</div>
+
+    <!-- Logo strip -->
+    <div class="logo-strip">
+      <img src = "Images/dgsa-logo.png" class = "logo" width = "90" height = "45">
+      <div class="logo-divider"></div>
+      <div class="logo-tagline">Dynamic Ground<br>Solutions Australia</div>
+    </div>
+
+    <div class="card-header">
+      <div class="avatar">TL</div>
+      <div class="name-block">
+        <div class="name">Tony Lansdown</div>
+      <div class="title">Director</div>
+      <div class="company">Dynamic Ground Solutions Australia</div>
+      </div>
+    </div>
+
+    <div class="details">
+      <div class="detail-row">
+        <div class="detail-icon">✉</div>
+        <div>
+          <div class="detail-label">Email</div>
+          <div class="detail-value"><a href="mailto:Jurie.engelbrecht@dgsa.com.au">tony.lansdown@dgsa.com.au</a></div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">☏</div>
+        <div>
+          <div class="detail-label">Phone</div>
+          <div class="detail-value"><a href="tel:0459 445 624">0418 623 592</a></div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">⬡</div>
+        <div>
+          <div class="detail-label">Website</div>
+          <div class="detail-value"><a href="https://www.dgsa.com.au" target="_blank">www.dgsa.com.au</a></div>
+        </div>
+      </div>
+      <div class="detail-row">
+        <div class="detail-icon">in</div>
+        <div>
+          <div class="detail-label">LinkedIn</div>
+          <div class="detail-value"><a href="https://au.linkedin.com/in/tony-lansdown-8978b256" target="_blank">linkedin.com/in/tonylansdown</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="qr-section">
+      <div id="qrcode"></div>
+      <div class="qr-info">
+        <div class="qr-label">Scan to save</div>
+        <div class="qr-desc">Scan this QR code to instantly download this contact to your phone.</div>
+      </div>
+    </div>
+
+    <button class="save-btn" onclick="downloadVCard()">
+      ↓ Save to Contacts
+    </button>
+
+    <div class="footer-note">tap the button or scan the QR code</div>
+  </div>
+</div>
+
+<script>
+  // ── EDIT DETAILS HERE ──────────────────────────────────────
+  const contact = {
+    firstName:  "Tony",
+    lastName:   "Lansdown",
+    title:      "Director",
+    company:    "Dynamic Ground Solutions Australia",
+    email:      "tony.lansdown@dgsa.com.au",
+    phone:      "0418 623 592",
+    website:    "https://www.dgsa.com.au",
+    linkedin:   "https://au.linkedin.com/in/tony-lansdown-8978b256",
+    city:       "Brisbane",
+    country:    "AU"
+  };
+  // ───────────────────────────────────────────────────────────
+
+  function buildVCard() {
+    return [
+      "BEGIN:VCARD",
+      "VERSION:3.0",
+      `N:${contact.lastName};${contact.firstName};;;`,
+      `FN:${contact.firstName} ${contact.lastName}`,
+      `TITLE:${contact.title}`,
+      `ORG:${contact.company}`,
+      `EMAIL;TYPE=INTERNET:${contact.email}`,
+      `TEL;TYPE=CELL:${contact.phone}`,
+      `URL:${contact.website}`,
+      `X-SOCIALPROFILE;type=linkedin:${contact.linkedin}`,
+      `ADR;TYPE=WORK:;;${contact.city};;;${contact.country}`,
+      "END:VCARD"
+    ].join("\n");
+  }
+
+  function downloadVCard() {
+    const blob = new Blob([buildVCard()], { type: "text/vcard" });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement("a");
+    a.href     = url;
+    a.download = `${contact.firstName}_${contact.lastName}.vcf`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  new QRCode(document.getElementById("qrcode"), {
+    text: buildVCard(),
+    width: 160,
+    height: 160,
+    colorDark: "#0a0a0a",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+</script>
+</body>
+</html>
